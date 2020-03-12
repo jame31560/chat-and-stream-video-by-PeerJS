@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>send</title>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
+  </head>
+  <body>
+    <input type="text" id="receiveId" />
+    <button onclick="connect()">連線</button>
+    <script>
+      var peer = new Peer();
+      var conn = null;
+      peer.on("open", function(id) {
+        console.log("My peer ID is: " + id);
+      });
+
+      function connect() {
+        console.log(document.getElementById("receiveId").value);
+        conn = peer.connect(document.getElementById("receiveId").value);
+        conn.on("data", function(data) {
+          console.log("Received", data);
+        });
+      }
+    </script>
+  </body>
+</html>

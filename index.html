@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
+  </head>
+  <body>
+    <label>Your ID:</label><br />
+    <textarea id="yourId"></textarea><br />
+    <label>Other ID:</label><br />
+    <textarea id="otherId"></textarea>
+    <button id="connect">connect</button><br />
+
+    <script>
+      var peer = new Peer();
+      var myId = document.getElementById("yourId");
+      peer.on("open", function(id) {
+        console.log("My peer ID is: " + id);
+        myId.innerText = id;
+      });
+      peer.on("connection", function(c) {
+        // Allow only a single connection
+        if (conn) {
+          c.on("open", function() {
+            c.send("Already connected to another client");
+            setTimeout(function() {
+              c.close();
+            }, 500);
+          });
+          return;
+        }
+
+        conn = c;
+        console.log("Connected to: " + conn.peer);
+        status.innerHTML = "Connected";
+        ready();
+      });
+    </script>
+  </body>
+</html>
